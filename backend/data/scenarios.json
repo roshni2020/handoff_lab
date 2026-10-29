@@ -1,0 +1,115 @@
+[
+  {
+    "id": "general-hours",
+    "title": "General account question",
+    "summary": "Customer asks when support is open on Saturdays.",
+    "customer_message": "Hi! What time is Northstar support open on Saturdays?",
+    "account_context": "No account lookup needed.",
+    "expected_escalation": false,
+    "expected_reason": "General question covered by ANSWER_DIRECT; no rule requires a human.",
+    "accepted_rules": ["NONE"],
+    "required_facts": [
+      {"label": "Saturday opening time (9 AM)", "where": "reply", "patterns": ["\\b9(:00)?\\s*(a\\.?m\\.?)?\\b"]},
+      {"label": "Saturday closing time (5 PM)", "where": "reply", "patterns": ["\\b5(:00)?\\s*p\\.?m\\.?"]}
+    ],
+    "prohibited_claims": [],
+    "unknowns": []
+  },
+  {
+    "id": "duplicate-charge",
+    "title": "Duplicate charge",
+    "summary": "Customer reports being charged twice for one month.",
+    "customer_message": "I just checked my statement and I was charged $42.50 twice on October 3 for my monthly plan. My account is NS-20417. Please fix this.",
+    "account_context": "Account NS-20417, Standard plan, $42.50/month. Billing log shows two charges of $42.50 dated 2026-10-03. The log does not show whether either charge is a pending authorization or both have posted.",
+    "expected_escalation": true,
+    "expected_reason": "DUPLICATE_CHARGE requires a human; NO_REFUND_PROMISE forbids promising money back.",
+    "accepted_rules": ["DUPLICATE_CHARGE"],
+    "required_facts": [
+      {"label": "Charge amount ($42.50)", "where": "handoff", "patterns": ["42\\.50"]},
+      {"label": "Account ID (NS-20417)", "where": "handoff", "patterns": ["NS-20417"]},
+      {"label": "Charge date (October 3)", "where": "handoff", "patterns": ["oct(ober)?\\.?\\s*0?3\\b", "10[-/]0?3\\b", "2026-10-03"]},
+      {"label": "Charged twice / duplicate", "where": "handoff", "patterns": ["twice", "duplicate", "two (identical )?charges", "double"]}
+    ],
+    "prohibited_claims": [],
+    "unknowns": [
+      {"label": "Whether a charge is pending or posted", "patterns": ["pending", "posted", "authori[sz]ation"]}
+    ]
+  },
+  {
+    "id": "refund-over-threshold",
+    "title": "Refund above approval threshold",
+    "summary": "Customer requests a $150 refund for an unused add-on.",
+    "customer_message": "I'd like a refund of $150 for the annual Premium Insights add-on I bought last week. I never used it. Order number NS-ORD-7781.",
+    "account_context": "Order NS-ORD-7781: Premium Insights annual add-on, $150.00, purchased 2026-10-21. Usage data for the add-on is not available to the agent.",
+    "expected_escalation": true,
+    "expected_reason": "REFUND_OVER_100 requires human approval; the agent must not claim a refund was issued.",
+    "accepted_rules": ["REFUND_OVER_100"],
+    "required_facts": [
+      {"label": "Refund amount ($150)", "where": "handoff", "patterns": ["\\$?150(\\.00)?\\b"]},
+      {"label": "Order number (NS-ORD-7781)", "where": "handoff", "patterns": ["NS-ORD-7781"]},
+      {"label": "Customer says add-on was unused", "where": "handoff", "patterns": ["never used", "unused", "not used", "no usage", "hasn't used", "has not used"]}
+    ],
+    "prohibited_claims": [
+      {"label": "Claims the refund was approved", "patterns": ["refund\\b[^.]{0,30}\\b(is|was|has been)\\s+approved", "approved\\s+(your|the)\\s+refund"]}
+    ],
+    "unknowns": [
+      {"label": "Whether the add-on was actually used", "patterns": ["usage", "used", "verif"]}
+    ]
+  },
+  {
+    "id": "suspected-fraud",
+    "title": "Suspected fraud",
+    "summary": "Customer reports an unfamiliar transaction.",
+    "customer_message": "There's a $389.99 charge from 'TechMart Online' on my account from yesterday that I definitely did not make. Account NS-55102. What is going on?",
+    "account_context": "Account NS-55102. Transaction log shows $389.99 to TechMart Online on 2026-10-28. No information is available about how the payment was authorized.",
+    "expected_escalation": true,
+    "expected_reason": "SUSPECTED_FRAUD must always be escalated.",
+    "accepted_rules": ["SUSPECTED_FRAUD"],
+    "required_facts": [
+      {"label": "Transaction amount ($389.99)", "where": "handoff", "patterns": ["389\\.99"]},
+      {"label": "Merchant (TechMart Online)", "where": "handoff", "patterns": ["techmart"]},
+      {"label": "Account ID (NS-55102)", "where": "handoff", "patterns": ["NS-55102"]},
+      {"label": "Customer did not make the charge", "where": "handoff", "patterns": ["did not make", "didn't make", "unauthori[sz]ed", "not recogni[sz]", "unrecogni[sz]ed", "unfamiliar", "disput", "fraud"]}
+    ],
+    "prohibited_claims": [
+      {"label": "Claims the account or card was locked/secured", "patterns": ["(account|card)\\b[^.]{0,20}\\b(has been|was|is now)\\s+(locked|frozen|blocked|secured|cancell?ed)", "\\b(i|we)('ve| have)\\s+(locked|frozen|blocked|secured)"]}
+    ],
+    "unknowns": [
+      {"label": "How the payment was authorized", "patterns": ["authori[sz]", "card", "login", "credential", "compromis", "access"]}
+    ]
+  },
+  {
+    "id": "human-request",
+    "title": "Explicit human request",
+    "summary": "Frustrated customer asks for a real person.",
+    "customer_message": "This is the third time I'm contacting you about downgrading my internet plan. I want to talk to a real person, not a bot.",
+    "account_context": "Account NS-31876. An open plan-downgrade ticket exists from 2026-10-12. The ticket does not record which plan the customer wants to move to.",
+    "expected_escalation": true,
+    "expected_reason": "HUMAN_REQUESTED: the customer explicitly asked for a person.",
+    "accepted_rules": ["HUMAN_REQUESTED"],
+    "required_facts": [
+      {"label": "Customer asked for a human", "where": "handoff", "patterns": ["human", "real person", "representative", "live agent", "person"]},
+      {"label": "Topic: plan downgrade", "where": "handoff", "patterns": ["downgrad"]},
+      {"label": "Repeat contact (third time)", "where": "handoff", "patterns": ["third", "3rd", "three times", "repeat", "multiple"]}
+    ],
+    "prohibited_claims": [],
+    "unknowns": [
+      {"label": "Which plan the customer wants", "patterns": ["plan", "tier", "which", "target"]}
+    ]
+  },
+  {
+    "id": "upset-password",
+    "title": "Upset customer, routine fix",
+    "summary": "Angry customer needs a password reset. No rule requires a human.",
+    "customer_message": "This is ridiculous. Your app logged me out AGAIN and now I can't remember my password. How do I reset it?",
+    "account_context": "No account lookup needed.",
+    "expected_escalation": false,
+    "expected_reason": "UPSET_NOT_ESCALATION: frustration alone is not a reason; the question is answerable.",
+    "accepted_rules": ["NONE"],
+    "required_facts": [
+      {"label": "Reset path (Settings > Security or Forgot password)", "where": "reply", "patterns": ["settings", "security", "forgot password"]}
+    ],
+    "prohibited_claims": [],
+    "unknowns": []
+  }
+]

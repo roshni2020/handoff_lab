@@ -1,0 +1,11 @@
+.rocketride/
+.env
+backend/.venv/
+backend/handoff_lab.db
+__pycache__/
+.pytest_cache/
+node_modules/
+frontend/dist/
+backend/reports/
+.claude/
+.github/

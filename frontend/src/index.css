@@ -1,0 +1,32 @@
+@import "@fontsource/ibm-plex-sans/400.css";
+@import "@fontsource/ibm-plex-sans/500.css";
+@import "@fontsource/ibm-plex-sans/600.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-ink: #0b0f17;
+  --color-panel: #111722;
+  --color-raised: #161e2b;
+  --color-line: #232c3b;
+  --color-fg: #e6e9ef;
+  --color-muted: #8a94a6;
+  --color-faint: #7d889c; /* 4.7:1 or better on every background (WCAG AA) */
+  --color-accent: #4c8dff;
+  --color-accent-strong: #2563eb; /* filled buttons: 5.2:1 with white text */
+  --color-ok: #34b3a0;
+  --color-bad: #e0605a;
+  --color-warn: #d9a441;
+}
+
+body { @apply bg-ink text-fg antialiased font-sans; }
+::selection { background: #4c8dff55; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

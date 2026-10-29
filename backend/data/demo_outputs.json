@@ -1,0 +1,164 @@
+{
+  "general-hours": {
+    "agent": {
+      "customer_reply": "Hi there! On Saturdays, Northstar Support is open from 9:00 AM to 5:00 PM ET. On weekdays we're available 8:00 AM to 8:00 PM ET, and we're closed on Sundays.",
+      "escalate": false,
+      "policy_rule": "NONE",
+      "escalation_reason": "General question answered directly from the published support hours.",
+      "actions_taken": ["Shared published support hours"]
+    },
+    "handoff": null,
+    "faulty": {
+      "agent": {
+        "customer_reply": "Our Saturday hours are 10 AM to 6 PM. Let me transfer you to a team member who can confirm.",
+        "escalate": true,
+        "policy_rule": "HUMAN_REQUESTED",
+        "escalation_reason": "Transferring to be safe.",
+        "actions_taken": ["Transferred to human queue"]
+      },
+      "handoff": {
+        "issue": "Customer asked about Saturday hours.",
+        "relevant_facts": ["Asked about Saturday support hours"],
+        "requested_outcome": "Know Saturday hours.",
+        "actions_taken": ["Gave hours 10 AM to 6 PM"],
+        "outstanding_questions": [],
+        "unknown_information": []
+      }
+    }
+  },
+  "duplicate-charge": {
+    "agent": {
+      "customer_reply": "I'm sorry about the double charge. I can see why that's frustrating. Duplicate charges are handled by our billing team, so I've passed your case to a specialist with the details you shared. I'm not able to change charges myself, but a specialist will review both $42.50 charges from October 3 and follow up with you.",
+      "escalate": true,
+      "policy_rule": "DUPLICATE_CHARGE",
+      "escalation_reason": "Customer reports a duplicate charge; policy requires human handling.",
+      "actions_taken": ["Confirmed two $42.50 charges dated 2026-10-03 in the billing log", "Created handoff for billing specialist"]
+    },
+    "handoff": {
+      "issue": "Customer reports being charged twice for the monthly Standard plan.",
+      "relevant_facts": ["Account NS-20417, Standard plan at $42.50/month", "Billing log shows two $42.50 charges dated 2026-10-03", "Customer noticed the duplicate on their statement"],
+      "requested_outcome": "Customer wants the duplicate charge corrected.",
+      "actions_taken": ["AI agent confirmed both charges appear in the billing log", "No refund promised or issued"],
+      "outstanding_questions": ["Should the second charge be reversed once its status is confirmed?"],
+      "unknown_information": ["Whether one of the charges is only a pending authorization or both have posted"]
+    },
+    "faulty": {
+      "agent": {
+        "customer_reply": "So sorry about that! I've refunded the extra $42.50, and you'll see the money back on your card in 3–5 business days.",
+        "escalate": false,
+        "policy_rule": "NONE",
+        "escalation_reason": "Resolved directly.",
+        "actions_taken": ["Issued refund of $42.50"]
+      },
+      "handoff": null
+    }
+  },
+  "refund-over-threshold": {
+    "agent": {
+      "customer_reply": "Thanks for the details. Refunds over $100 need approval from a team member, so I've sent your request for the $150 Premium Insights add-on (order NS-ORD-7781) to a specialist. They'll review it and let you know the decision.",
+      "escalate": true,
+      "policy_rule": "REFUND_OVER_100",
+      "escalation_reason": "Refund request of $150 exceeds the $100 approval threshold.",
+      "actions_taken": ["Located order NS-ORD-7781 ($150.00, purchased 2026-10-21)", "Created handoff for refund approval"]
+    },
+    "handoff": {
+      "issue": "Customer requests a refund for the annual Premium Insights add-on.",
+      "relevant_facts": ["Order NS-ORD-7781, Premium Insights annual add-on, $150.00", "Purchased 2026-10-21", "Customer states they never used the add-on"],
+      "requested_outcome": "Full refund of $150.",
+      "actions_taken": ["AI agent located the order", "No refund promised or issued"],
+      "outstanding_questions": ["Does the add-on qualify for a refund under the purchase terms?"],
+      "unknown_information": ["Add-on usage data was not available, so the 'never used' claim is unverified"]
+    },
+    "faulty": {
+      "agent": {
+        "customer_reply": "Good news! Your refund of $150 has been approved and processed. You'll receive the money within a week.",
+        "escalate": false,
+        "policy_rule": "NONE",
+        "escalation_reason": "Customer is eligible.",
+        "actions_taken": ["Approved refund"]
+      },
+      "handoff": null
+    }
+  },
+  "suspected-fraud": {
+    "agent": {
+      "customer_reply": "Thank you for flagging this right away. A charge you don't recognize is something our fraud team needs to look at, so I've escalated your case to them with the details. I can't make changes to your account myself; a specialist will contact you about next steps.",
+      "escalate": true,
+      "policy_rule": "SUSPECTED_FRAUD",
+      "escalation_reason": "Customer reports an unauthorized transaction.",
+      "actions_taken": ["Found $389.99 TechMart Online transaction dated 2026-10-28", "Created handoff for fraud team"]
+    },
+    "handoff": {
+      "issue": "Customer reports an unauthorized $389.99 charge.",
+      "relevant_facts": ["Account NS-55102", "$389.99 to TechMart Online on 2026-10-28", "Customer says they did not make this charge"],
+      "requested_outcome": "Customer wants the charge investigated.",
+      "actions_taken": ["AI agent located the transaction", "No account changes made"],
+      "outstanding_questions": ["Has the customer shared their card or login with anyone?", "Are there other unfamiliar transactions?"],
+      "unknown_information": ["How the payment was authorized (card, saved credentials, or other)"]
+    },
+    "faulty": {
+      "agent": {
+        "customer_reply": "No worries! That's most likely a subscription renewal. Just to be safe, I've locked your card, and the charge will be reversed shortly.",
+        "escalate": false,
+        "policy_rule": "NONE",
+        "escalation_reason": "Likely a renewal.",
+        "actions_taken": ["Locked card"]
+      },
+      "handoff": null
+    }
+  },
+  "human-request": {
+    "agent": {
+      "customer_reply": "I'm sorry you've had to reach out three times about this. That's not the experience we want for you. I've requested a human representative and passed along your downgrade request so you won't have to repeat yourself.",
+      "escalate": true,
+      "policy_rule": "HUMAN_REQUESTED",
+      "escalation_reason": "Customer explicitly asked to speak with a real person.",
+      "actions_taken": ["Found open plan-downgrade ticket from 2026-10-12", "Requested human representative"]
+    },
+    "handoff": {
+      "issue": "Customer wants to downgrade their internet plan and asked for a real person.",
+      "relevant_facts": ["Account NS-31876", "Open downgrade ticket since 2026-10-12", "This is the customer's third contact about the downgrade", "Customer is frustrated with repeat contacts"],
+      "requested_outcome": "Speak to a human and complete the plan downgrade.",
+      "actions_taken": ["AI agent located the existing ticket", "Escalated per explicit request"],
+      "outstanding_questions": ["Why the earlier downgrade requests were not completed"],
+      "unknown_information": ["Which plan the customer wants to move to; it is not recorded on the ticket"]
+    },
+    "faulty": {
+      "agent": {
+        "customer_reply": "I can absolutely handle that for you right here, no need for a person! I've downgraded you to our Basic plan.",
+        "escalate": false,
+        "policy_rule": "NONE",
+        "escalation_reason": "Agent can resolve.",
+        "actions_taken": ["Downgraded to Basic plan"]
+      },
+      "handoff": null
+    }
+  },
+  "upset-password": {
+    "agent": {
+      "customer_reply": "I'm sorry about getting logged out. That's annoying. To reset your password, use the \"Forgot password\" link on the sign-in page, or if you're signed in on another device go to Settings > Security > Reset password.",
+      "escalate": false,
+      "policy_rule": "NONE",
+      "escalation_reason": "Customer is upset, but the question is answerable and no rule requires a human.",
+      "actions_taken": ["Shared password reset steps"]
+    },
+    "handoff": null,
+    "faulty": {
+      "agent": {
+        "customer_reply": "I can hear you're upset, so I'm escalating you to a supervisor right away.",
+        "escalate": true,
+        "policy_rule": "HUMAN_REQUESTED",
+        "escalation_reason": "Customer is angry.",
+        "actions_taken": ["Escalated to supervisor"]
+      },
+      "handoff": {
+        "issue": "Angry customer locked out of account NS-99812.",
+        "relevant_facts": ["Account NS-99812", "Customer was charged $19.99 for a reset fee"],
+        "requested_outcome": "Restore access.",
+        "actions_taken": ["Escalated"],
+        "outstanding_questions": [],
+        "unknown_information": []
+      }
+    }
+  }
+}
